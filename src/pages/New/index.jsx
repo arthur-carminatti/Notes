@@ -1,3 +1,4 @@
+import { Button } from "../../components/Button";
 import { Header } from "../../components/Header";
 import { Input } from "../../components/Input";
 import { NoteItem } from "../../components/NoteItem";
@@ -24,6 +25,15 @@ export function New() {
                         <NoteItem value="https://github.com/arthur-carminatti" />
                         <NoteItem isNew placeholder="Novo link" />
                     </Section>
+
+                    <Section title="Marcadores">
+                        <div className="tags">
+                            <NoteItem value="react" />
+                            <NoteItem isNew placeholder="Nova tag" />
+                        </div>
+                    </Section>
+
+                    <Button title="Salvar" />
                 </Form>
             </main>
         </Container>
