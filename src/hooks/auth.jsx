@@ -33,13 +33,32 @@ function AuthProvider({ children }) {
         setData({})
     }
 
+    async function updateProfile({ user }) {
+        try {
+            await api.put("/users", user)
+
+            const { password, old_password, ...userData } = user
+
+            localStorage.setItem("@notes:user", JSON.stringify(userData))
+            setData({ user, token: data.token })
+
+            alert("Perfil atualizado!")
+        } catch (error) {
+            if (error.response) {
+                alert(error.response.data.message)
+            } else {
+                alert("Não foi possível atualizar o perfil.")
+            }
+        }
+    }
+
     useEffect(() => {
         const token = localStorage.getItem("@notes:token")
         const user = localStorage.getItem("@notes:user")
 
         if (user && token) {
             api.defaults.headers.common['Authorization'] = `Bearer ${token}`
-            
+
             setData({
                 token,
                 user: JSON.parse(user)
@@ -51,6 +70,7 @@ function AuthProvider({ children }) {
         <AuthContext.Provider value={{
             signIn,
             signOut,
+            updateProfile,
             user: data.user
         }}>
             {children}
