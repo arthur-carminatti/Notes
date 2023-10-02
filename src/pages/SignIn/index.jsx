@@ -3,11 +3,10 @@ import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
 import { Background, Container, Form } from "./styles";
 import { FiMail, FiLock } from 'react-icons/fi'
-import { useContext } from "react";
-import { MyContext } from "../../myContext";
+import { useAuth } from '../../hooks/auth'
 
 export function SignIn() {
-    const data = useContext(MyContext)
+    const data = useAuth()
     console.log(data.email)
 
     return (
