@@ -14,7 +14,8 @@ function AuthProvider({ children }) {
             localStorage.setItem("@notes:user", JSON.stringify(user))
             localStorage.setItem("@notes:token", token)
 
-            api.defaults.headers.authorizations = `Bearer ${token}`
+            api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
             setData({ user, token })
         } catch (error) {
             if (error.response) {
@@ -37,7 +38,8 @@ function AuthProvider({ children }) {
         const user = localStorage.getItem("@notes:user")
 
         if (user && token) {
-            api.defaults.headers.authorizations = `Bearer ${token}`
+            api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+            
             setData({
                 token,
                 user: JSON.parse(user)
