@@ -5,8 +5,22 @@ import { Brand, Container, Content, Menu, Search, NewNote } from "./styles";
 import { Input } from '../../components/Input';
 import { Section } from '../../components/Section';
 import { Note } from '../../components/Note';
+import { useEffect, useState } from 'react';
+import { api } from '../../services/api';
 
 export function Home() {
+    const [tags, setTags] = useState([])
+
+    useEffect(() => {
+        async function fetchTags() {
+            const response = await api.get("/tags")
+            console.log(response.data)
+            setTags(response.data)
+        }
+
+        fetchTags()
+    }, [])
+
     return (
         <Container>
             <Brand>
@@ -16,9 +30,22 @@ export function Home() {
             <Header />
 
             <Menu>
-                <li><ButtonText title="Todos" $isactive /></li>
-                <li><ButtonText title="React" /></li>
-                <li><ButtonText title="Nodejs" /></li>
+                <li>
+                    <ButtonText
+                        title="Todos"
+                        $isactive
+                    />
+                </li>
+
+                {
+                    tags && tags.map(tag => (
+                        <li key={String(tag.id)}>
+                            <ButtonText
+                                title={tag.name}
+                            />
+                        </li>
+                    ))
+                }
             </Menu>
 
             <Search>
@@ -30,8 +57,8 @@ export function Home() {
                     <Note data={{
                         title: 'React',
                         tags: [
-                            { id: '1', name: 'react'},
-                            { id: '2', name: 'rocketseat'}
+                            { id: '1', name: 'react' },
+                            { id: '2', name: 'rocketseat' }
                         ]
                     }}
                     />
