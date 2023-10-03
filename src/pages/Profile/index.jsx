@@ -4,9 +4,9 @@ import { Avatar, Container, Form } from "./styles";
 import { FiArrowLeft, FiUser, FiMail, FiLock, FiCamera } from 'react-icons/fi'
 import { useState } from "react";
 import { useAuth } from "../../hooks/auth";
-import avatarPlaceholder from '../../assets/avatar_placeholder.svg'
 import { api } from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import avatarPlaceholder from '../../assets/avatar_placeholder.svg'
 
 export function Profile() {
     const { user, updateProfile } = useAuth()
@@ -27,14 +27,16 @@ export function Profile() {
     }
 
     async function handleUpdate() {
-        const user = {
+        const updated = {
             name,
             email,
             password: passwordNew,
             old_password: passwordOld
         }
 
-        await updateProfile({ user, avatarFile })
+        const userUpdated = Object.assign(user, updated)
+
+        await updateProfile({ user: userUpdated, avatarFile })
     }
 
     function handleChangeAvatar(event) {
