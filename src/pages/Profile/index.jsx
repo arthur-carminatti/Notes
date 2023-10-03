@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
 import { Avatar, Container, Form } from "./styles";
@@ -7,6 +6,7 @@ import { useState } from "react";
 import { useAuth } from "../../hooks/auth";
 import avatarPlaceholder from '../../assets/avatar_placeholder.svg'
 import { api } from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
 export function Profile() {
     const { user, updateProfile } = useAuth()
@@ -19,6 +19,12 @@ export function Profile() {
     const avatarUrl = user.avatar ? `${api.defaults.baseURL}/files/${user.avatar}` : avatarPlaceholder
     const [avatar, setAvatar] = useState(avatarUrl)
     const [avatarFile, setAvatarFile] = useState(null)
+
+    const navigate = useNavigate()
+
+    function handleBack() {
+        navigate(-1)
+    }
 
     async function handleUpdate() {
         const user = {
@@ -42,9 +48,9 @@ export function Profile() {
     return (
         <Container>
             <header>
-                <Link href="/">
+                <button type="button" onClick={handleBack}>
                     <FiArrowLeft />
-                </Link>
+                </button>
             </header>
 
             <Form>
