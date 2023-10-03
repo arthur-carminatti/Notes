@@ -1,45 +1,92 @@
+import { useNavigate, useParams } from "react-router-dom"
 import { Button } from "../../components/Button/index.jsx"
 import { ButtonText } from "../../components/ButtonText/index.jsx"
 import { Header } from "../../components/Header/index.jsx"
 import { Section } from "../../components/Section/index.jsx"
 import { Tag } from "../../components/Tag/index.jsx"
 import { Container, Content, Links } from "./styles.js"
+import { useEffect, useState } from "react"
+import { api } from "../../services/api.js"
 
 export function Details() {
+  const [data, setData] = useState(null)
+
+  const params = useParams()
+  const navigate = useNavigate()
+
+  function handleBack() {
+    navigate("/")
+  }
+
+  useEffect(() => {
+    async function fetchNote() {
+      const response = await api.get(`/notes/${params.id}`)
+      setData(response.data)
+    }
+
+    fetchNote()
+  }, [])
+
   return (
     <Container>
       <Header />
 
-      <main>
-        <Content>
-          <ButtonText title="Excluir Nota" />
+      {
+        data && (
+          <main>
+            <Content>
+              <ButtonText title="Excluir Nota" />
 
-          <h1>
-            Introdução ao React
-          </h1>
+              <h1>
+                {data.title}
+              </h1>
 
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis, dolores reiciendis similique natus nemo minima deserunt nihil?
-            Excepturi, sit tempora iure provident reiciendis, iste ipsum ipsam perspiciatis dolores sint rerum.
-          </p>
+              <p>
+                {data.descriptions}
+              </p>
 
-          <Section title="Links úteis" >
-            <Links>
-              <li>
-                <a href="https://github.com/arthur-carminatti">https://github.com/arthur-carminatti</a>
-              </li>
-            </Links>
-          </Section>
+              {
+                data.links && (
+                  <Section title="Links úteis" >
+                    <Links>
+                      {
+                        data.links.map(link => (
+                          <li key={String(link.id)}>
+                            <a href={link.url} target="_blank">
+                              {link.url}
+                            </a>
+                          </li>
+                        ))
+                      }
+                    </Links>
+                  </Section>
+                )
+              }
 
-          <Section title="Marcadores" >
-            <Tag title="express" />
-            <Tag title="nodejs" />
-          </Section>
+              {
+                data.tags && (
+                  <Section title="Marcadores" >
+                    {
+                      data.tags.map(tag => (
+                        <Tag
+                          key={tag.id}
+                          title={tag.name}
+                        />
+                      ))
+                    }
+                  </Section>
+                )
+              }
 
-          <Button title="Entrar" loading />
+              <Button
+                title="Voltar"
+                onClick={handleBack}
+              />
 
-        </Content>
-      </main>
+            </Content>
+          </main>
+        )
+      }
     </Container>
   )
 }
