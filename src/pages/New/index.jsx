@@ -6,8 +6,17 @@ import { NoteItem } from "../../components/NoteItem";
 import { Section } from "../../components/Section";
 import { TextArea } from "../../components/TextArea";
 import { Container, Form } from "./styles";
+import { useState } from "react";
 
 export function New() {
+    const [links, setLinks] = useState([])
+    const [newLink, setNewLink] = useState("")
+
+    function handleAddLink() {
+        setLinks(prevState => [...prevState, newLink])
+        setNewLink("")
+    }
+
     return (
         <Container>
             <Header />
@@ -23,8 +32,22 @@ export function New() {
                     <TextArea placeholder="Observações" />
 
                     <Section title="Links úteis">
-                        <NoteItem value="https://github.com/arthur-carminatti" />
-                        <NoteItem isNew placeholder="Novo link" />
+                        {
+                            links.map((link, index) => (
+                                <NoteItem
+                                    key={String(index)}
+                                    value={link}
+                                    onClick={() => { }}
+                                />
+                            ))
+                        }
+                        <NoteItem
+                            isNew
+                            placeholder="Novo link"
+                            value={newLink}
+                            onChange={e => setNewLink(e.target.value)}
+                            onClick={handleAddLink}
+                        />
                     </Section>
 
                     <Section title="Marcadores">
